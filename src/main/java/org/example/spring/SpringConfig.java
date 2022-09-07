@@ -1,0 +1,18 @@
+package org.example.spring;
+
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.PropertySources;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+
+@EnableWebMvc
+@Configuration
+@EnableTransactionManagement
+@ComponentScan("org.example")
+@PropertySources({
+        @PropertySource(value = "file:./config.properties", ignoreResourceNotFound = true)
+})
+public class SpringConfig {
+}
