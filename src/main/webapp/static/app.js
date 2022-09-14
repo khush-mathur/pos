@@ -12,6 +12,18 @@ function toJson($form){
     return json;
 }
 
+function toJsonArray($form){
+    var serialized = $form.serializeArray();
+    console.log(serialized);
+    var s = '';
+    var data = {};
+    for(s in serialized){
+        data[serialized[s]['name']] = serialized[s]['value']
+    }
+    data = [data]
+    var json = JSON.stringify(data);
+    return json;
+}
 
 function handleAjaxError(response){
 	var response = JSON.parse(response.responseText);
@@ -31,7 +43,7 @@ function readFileData(file, callback){
 }
 
 
-function writeFileData(arr){
+function writeFileData(arr,fileName){
 	var config = {
 		quoteChar: '',
 		escapeChar: '',
@@ -43,12 +55,12 @@ function writeFileData(arr){
     var fileUrl =  null;
 
     if (navigator.msSaveBlob) {
-        fileUrl = navigator.msSaveBlob(blob, 'download.tsv');
+        fileUrl = navigator.msSaveBlob(blob, fileName);
     } else {
         fileUrl = window.URL.createObjectURL(blob);
     }
     var tempLink = document.createElement('a');
     tempLink.href = fileUrl;
-    tempLink.setAttribute('download', 'download.tsv');
+    tempLink.setAttribute('download', fileName);
     tempLink.click(); 
 }

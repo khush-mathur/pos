@@ -14,7 +14,8 @@
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light mb-1" th:fragment="name_site_navbar">
   <a class="navbar-brand" th:href="@{/}">
-    <img th:src="@{/static/logo.jpg}" class="d-inline-block align-top" alt="">
+<!--    <img th:src="@{/static/logo.jpg}" class="d-inline-block align-top" alt="">-->
+    <div>POS</div>
   </a>
 
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -39,9 +40,9 @@
   </div>
 </nav>
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light  mb-1" th:fragment="name_app_navbar">
+<nav class="nav-pills navbar navbar-expand-lg navbar-light bg-light justify-content-center mb-1" th:fragment="name_app_navbar">
   <a class="navbar-brand" th:href="@{/}">
-    <img th:src="@{/static/logo.jpg}" class="d-inline-block align-top" alt="">
+    <div class = "font-weight-bold">POS</div>
   </a>
 
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -59,7 +60,16 @@
         <a class="nav-link" th:href="@{/ui/product}">Product</a>
       </li>
       <li class="nav-item">
-            <a class="nav-link" th:href="@{/ui/order}">Order</a>
+        <a class="nav-link" th:href="@{/ui/inventory}">Inventory</a>
+      </li>
+      <li class="nav-item">
+            <a class="nav-link" th:href="@{/ui/order}">Orders</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" th:href="@{/ui/cart}">Cart</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" th:href="@{/ui/report}">Report</a>
       </li>
     </ul>
   </div>
