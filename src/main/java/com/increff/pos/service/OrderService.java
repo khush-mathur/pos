@@ -2,12 +2,14 @@ package com.increff.pos.service;
 
 import com.increff.pos.dao.OrderDao;
 import com.increff.pos.exception.ApiException;
+import com.increff.pos.model.data.InvoiceData;
 import com.increff.pos.model.data.OrderItemData;
 import com.increff.pos.pojo.OrderPojo;
+import org.apache.fop.apps.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
@@ -22,15 +24,16 @@ import java.util.List;
 @Service
 public class OrderService {
     @Autowired
-    OrderDao orderDao;
+    private OrderDao orderDao;
 
     @Autowired
-    OrderItemService orderItemService;
+    private OrderItemService orderItemService;
+    private final FopFactory fopFactory = FopFactory.newInstance(new File(".").toURI());
     public OrderPojo getById(Integer id) throws ApiException{
         OrderPojo pojo = orderDao.getByID(id);
         if(pojo==null)
             new ApiException("No order exist by Id : " + id);
-        return orderDao.getByID(id);
+        return pojo;
     }
 
     public List<OrderPojo> getAllOrders(){
@@ -42,22 +45,23 @@ public class OrderService {
             orderDao.add(order);
     }
 
-    @Transactional(rollbackOn = ApiException.class)
+    @Transactional(rollbackFor = ApiException.class)
     public OrderPojo addOrder() {
         OrderPojo pojo = new OrderPojo();
         pojo.setDateTime(ZonedDateTime.now());
+        pojo.setStatus("pending");
         return orderDao.add(pojo);
     }
 
     @Transactional
     public void getOrderInvoice(Integer orderId,List<OrderItemData> orderItemDataList) throws ApiException {
         ZonedDateTime time = getById(orderId).getDateTime();
-        double total = 0.;
+        double total = 0.0;
         for (OrderItemData itemData : orderItemDataList) {
             total += itemData.getQuantity() * itemData.getSellingPrice();
         }
         InvoiceData invoiceData = new InvoiceData(orderItemDataList, time, total, orderId);
-        String invoice = "main/resources/Invoice/invoice" + orderId + ".pdf";
+        String invoice = "main/webapp/invoice/invoice" + orderId + ".pdf";
         String xml = jaxbObjectToXML(invoiceData);
         File xsltFile = new File("src", "main/resources/com/increff/pos/invoice.xml");
         File pdfFile = new File("src", invoice);
@@ -100,9 +104,23 @@ public class OrderService {
             System.out.println("Transformer Exception");
             throw new ApiException(e.getMessage());
         } catch (IOException e) {
+            e.printStackTrace();
             throw new ApiException(e.getMessage());
         } finally {
-            out.close();
+            if(out==null)
+                System.out.println("out is null");
+            else
+                out.close();
         }
+    }
+
+    @Transactional
+    public void updateOrderStatus(Integer orderId) throws ApiException {
+        OrderPojo order = getById(orderId);
+        order.setStatus("completed");
+    }
+
+    public void deleteOrder(Integer id) {
+        orderDao.delete(id);
     }
 }

@@ -108,7 +108,7 @@ function uploadRows(){
 	
 	var json = JSON.stringify(row);
 	var url = getBrandUrl() + "/create";
-
+    console.log(json)
 	//Make ajax call
 	$.ajax({
 	   url: url,
@@ -140,8 +140,7 @@ function displayBrandList(data){
 	$tbody.empty();
 	for(var i in data){
 		var e = data[i];
-		var buttonHtml = '<button onclick="deleteBrand(' + e.id + ')">delete</button>'
-		buttonHtml += ' <button onclick="displayEditBrand(' + e.id + ')">edit</button>'
+		var buttonHtml = ' <button class = "btn btn-outline-secondary btn-sm" onclick="displayEditBrand(' + e.id + ')">edit</button>'
 		var row = '<tr>'
 		+ '<td>' + e.id + '</td>'
 		+ '<td>' + e.brandName + '</td>'
@@ -217,7 +216,12 @@ function handleAjaxError(response){
 	var response = JSON.parse(response.responseText);
 	alert(response.message);
 }
+function highLight(){
+highlightItem("Brands")
+}
 
 $(document).ready(init);
+$(document).ready(highLight);
 $(document).ready(getBrandList);
+
 

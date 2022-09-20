@@ -10,59 +10,83 @@
 
 <div class="container">
 
-    <h4>Sales Report</h4>
+    <h3>Reports</h3>
+    <hr>
 
+    <div>
+        <h4 class = "font-italic">Sales Report</h4>
 
     <!-- Top row with form-->
-    <div class="row">
-        <div class="col-12">
-            <form class="form-inline" id="sales-report-form">
-                <div class="form-group">
-                    <label for="inputStartDate" class="col-sm-2 col-form-label">Start Date</label>
-                    <div class="col-sm-10">
-                        <input type="datetime-local" class="form-control" name="startDate" id="inputStartDate" placeholder="Enter Start Date">
+        <div class="row">
+         <div class="col-12">
+               <form class="form-inline" id="sales-report-form">
+                    <div class="form-group mb-3 w-50">
+                       <label for="inputStartDate" class="col-sm-2 col-form-label">Start Date</label>
+                        <div class="col-sm-10">
+                            <input type="datetime-local" class="form-control" name="startDate" id="inputStartDate" placeholder="Enter Start Date">
+                        </div>
                     </div>
-                </div>
-                <br/>
-                <div class="form-group">
-                    <label for="inputEndDate" class="col-sm-2 col-form-label">End Date</label>
-                    <div class="col-sm-10">
-                        <input type="datetime-local" class="form-control" name="endDate" id="inputEndDate" placeholder="Enter End Date">
+                    <br/>
+                    <div class="form-group mb-3 w-50">
+                        <label for="inputEndDate" class="col-sm-2 col-form-label">End Date</label>
+                        <div class="col-sm-10">
+                            <input type="datetime-local" class="form-control" name="endDate" id="inputEndDate" placeholder="Enter End Date">
+                        </div>
                     </div>
-                </div>
-                <br/>
-                <div class="form-group">
-                    <label for="inputBrand" class="col-sm-2 col-form-label">Brand</label>
-                    <div class="col-sm-10">
-                        <input type="text" class="form-control" name="brand" id="inputBrand" placeholder="Enter Brand">
-                    </div>
-                </div><br/>
-                <div class="form-group">
-                    <label for="inputCategory" class="col-sm-2 col-form-label">Category</label>
-                    <div class="col-sm-10">
-                        <input type="text" class="form-control" name="category" id="inputCategory" placeholder="Enter Category">
-                    </div>
-                </div>
-                <br/>
-            </form>
+                    <br/>
+                    <div class="form-group mb-3 w-50">
+                        <label for="inputBrand" class="col-sm-2 col-form-label">Brand</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="brand" id="inputBrand" placeholder="Enter Brand">
+                        </div>
+                    </div><br/>
+                    <div class="form-group mb-3 w-50">
+                        <label for="inputCategory" class="col-sm-2 col-form-label">Category</label>
+                           <div class="col-sm-10">
+                               <input type="text" class="form-control" name="category" id="inputCategory" placeholder="Enter Category">
+                            </div>
+                   </div>
+                   <br/>
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            &nbsp;
+        </div>
+        <div> <span class = "lead">Report shows the category-wise sales between the given time frame.</span>
+        <button type="button" class="btn btn-outline-primary float-right" id="get-sales-report">Download</button>
         </div>
     </div>
-    <button type="button" class="btn btn-primary" id="get-sales-report">Download</button>
 
     <!-- Blank Row -->
     <div class="row">
         &nbsp;
     </div>
 
-    <h4>Brand Report</h4>
-    <button type="button" class="btn btn-primary" id="get-brand-report">Download</button>
+    <hr>
+    <div class="row">
+        &nbsp;&nbsp;
+    </div>
+    <div>
+        <h4 class = "font-italic">Brand Report</h4>
+        <div> <span class = "lead">Report shows the all the brands and categories.</span>
+            <button type="button" class="btn btn-outline-primary float-right m3" id="get-brand-report">Download</button>
+        </div>
+    </div>
 
     <div class="row">
-        &nbsp;
+        &nbsp;&nbsp;
     </div>
-    <h4>Inventory Report</h4>
-    <button type="button" class="btn btn-primary" id="get-inventory-report">Download</button>
-
+    <hr>
+    <div class="row">
+        &nbsp;&nbsp;
+    </div>
+    <div>
+        <h4 class = "font-italic">Inventory Report</h4>
+        <div> <span class = "lead">Report shows the brand and category wise inventory status.</span>
+        <button type="button" class="btn btn-outline-primary float-right m3" id="get-inventory-report">Download</button>
+        </div>
+    </div>
 
 </div> <!-- Container end-->
 

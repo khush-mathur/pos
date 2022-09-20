@@ -43,13 +43,32 @@ public class ReportDto {
     }
 
     public List<SalesReportData> getSalesReport(SalesReportForm salesReportForm) throws ApiException{
+        if(!validateInput(salesReportForm)) {
+            throw new ApiException("Invalid Input");
+        }
         SalesReportPojo pojo = new SalesReportPojo();
         pojo.setStartTime(LocalDateTime.parse(salesReportForm.getStartDate(), formatter).atZone(ZoneId.systemDefault()));
         pojo.setEndTime(LocalDateTime.parse(salesReportForm.getEndDate(), formatter).atZone(ZoneId.systemDefault()));
         pojo.setBrand(salesReportForm.getBrand());
         pojo.setCategory(salesReportForm.getCategory());
-        if(pojo.getStartTime().isAfter(pojo.getEndTime()))
+        if (pojo.getStartTime().isAfter(pojo.getEndTime()))
             throw new ApiException("Invalid input : start date can't be after end date");
-        return reportService.getSalesReport(pojo);
+        return reportService.getSalesReport(normalise(pojo));
+    }
+    private SalesReportPojo normalise (SalesReportPojo pojo){
+        pojo.setBrand(pojo.getBrand().trim().toLowerCase());
+        pojo.setCategory(pojo.getCategory().trim().toLowerCase());
+        return pojo;
+    }
+    private boolean validateInput(SalesReportForm inputForm) throws ApiException {
+        if(inputForm.getStartDate()==null)
+            throw new ApiException("Please enter a valid Start Date");
+        else if(inputForm.getEndDate()==null)
+            throw new ApiException("Please enter a valid End Date");
+        else if (brandService.getByBrandAndCategory(inputForm.getBrand(),"%") == null)
+            throw new ApiException("Please enter a valid Brand Name");
+        else if(brandService.getByBrandAndCategory("%", inputForm.getCategory())==null)
+            throw new ApiException("Please enter a valid Category");
+        return true;
     }
 }

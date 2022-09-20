@@ -1,0 +1,75 @@
+<!doctype html>
+
+<html lang="en">
+
+<head th:replace="snippets.html :: name_head"></head>
+
+<body>
+
+<nav th:replace="snippets.html :: name_app_navbar"></nav>
+
+<div class="container">
+
+    <h4>Sales Report</h4>
+
+
+    <!-- Top row with form-->
+    <div class="row">
+        <div class="col-12">
+            <form class="form-inline" id="sales-report-form">
+                <div class="form-group">
+                    <label for="inputStartDate" class="col-sm-2 col-form-label">Start Date</label>
+                    <div class="col-sm-10">
+                        <input type="datetime-local" class="form-control" name="startDate" id="inputStartDate" placeholder="Enter Start Date">
+                    </div>
+                </div>
+                <br/>
+                <div class="form-group">
+                    <label for="inputEndDate" class="col-sm-2 col-form-label">End Date</label>
+                    <div class="col-sm-10">
+                        <input type="datetime-local" class="form-control" name="endDate" id="inputEndDate" placeholder="Enter End Date">
+                    </div>
+                </div>
+                <br/>
+                <div class="form-group">
+                    <label for="inputBrand" class="col-sm-2 col-form-label">Brand</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" name="brand" id="inputBrand" placeholder="Enter Brand">
+                    </div>
+                </div><br/>
+                <div class="form-group">
+                    <label for="inputCategory" class="col-sm-2 col-form-label">Category</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" name="category" id="inputCategory" placeholder="Enter Category">
+                    </div>
+                </div>
+                <br/>
+            </form>
+        </div>
+    </div>
+    <button type="button" class="btn btn-primary" id="get-sales-report">Download</button>
+
+    <!-- Blank Row -->
+    <div class="row">
+        &nbsp;
+    </div>
+
+    <h4>Brand Report</h4>
+    <button type="button" class="btn btn-primary" id="get-brand-report">Download</button>
+
+    <div class="row">
+        &nbsp;
+    </div>
+    <h4>Inventory Report</h4>
+    <button type="button" class="btn btn-primary" id="get-inventory-report">Download</button>
+
+
+</div> <!-- Container end-->
+
+<footer th:replace="snippets.html :: name_footer"></footer>
+
+<script th:src="@{/static/report.js}"/></script>
+
+</body>
+
+</html>

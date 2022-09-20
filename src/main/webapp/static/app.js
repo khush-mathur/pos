@@ -2,7 +2,7 @@
 //HELPER METHOD
 function toJson($form){
     var serialized = $form.serializeArray();
-    console.log(serialized);
+//    console.log(serialized);
     var s = '';
     var data = {};
     for(s in serialized){
@@ -63,4 +63,16 @@ function writeFileData(arr,fileName){
     tempLink.href = fileUrl;
     tempLink.setAttribute('download', fileName);
     tempLink.click(); 
+}
+function highlightItem(head_name) {
+    let elements = document.getElementsByClassName('nav-link');
+    Array.from(elements).forEach(element => {
+        console.log(element.className);
+        console.log(element);
+        if (element.text == head_name) {
+            element.classList.add("active");
+        } else {
+            element.classList.remove("active");
+        }
+    });
 }

@@ -8,4 +8,6 @@ import lombok.Setter;
 public class OrderItemForm {
     private String barcode;
     private Integer quantity;
+    private Integer orderId;
+    private Integer productId;
 }

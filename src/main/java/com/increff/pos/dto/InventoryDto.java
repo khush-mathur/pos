@@ -21,8 +21,9 @@ public class InventoryDto {
          return inventoryService.get(id);
     }
 
-    public void update(Integer id, Integer quantity) throws ApiException {
-         inventoryService.updateQuantity(id,quantity);
+    public void update(Integer productId, Integer quantity) throws ApiException {
+        if(validateInput(productId,quantity))
+            inventoryService.updateQuantity(productId,quantity);
     }
 
     public List<InventoryPojo> fetchAll() {
@@ -31,8 +32,16 @@ public class InventoryDto {
 
 
     public void add(InventoryData inventoryData) throws ApiException {
-        if(productService.getProductById(inventoryData.getProductId())==null)
+        if(validateInput(inventoryData.getProductId(),inventoryData.getQuantity())
+                && productService.getProductById(inventoryData.getProductId())==null)
             throw new ApiException("No product exist with id : "+ inventoryData.getProductId()+ " in master data");
         inventoryService.addInInventory(InventoryDtoHelper.convertToPojo(inventoryData));
+    }
+    private boolean validateInput(Integer productId,Integer quantity) throws ApiException {
+        if(productId==null)
+            throw new ApiException("Please enter valid Product Id");
+        if(quantity==null || quantity < 0)
+            throw new ApiException("Please enter valid Quantity");
+        return true;
     }
 }

@@ -1,13 +1,13 @@
 package com.increff.pos.model.data;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import com.increff.pos.model.forms.ProductForm;
+import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
 public class ProductData extends ProductForm {
-    private int id;
+    private Integer id;
+    private String brandName;
+    private String category;
 }

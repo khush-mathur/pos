@@ -21,8 +21,6 @@ public class ProductService {
     public void add(ProductPojo productPojo) throws ApiException{
         if (validate(productPojo) && !productAlreadyExists(productPojo)) {
             productDao.add(productPojo);
-            //remove
-//            inventoryService.addInInventory(productPojo.getId());
         }
     }
 

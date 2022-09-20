@@ -19,7 +19,7 @@ public class BrandService {
     public BrandPojo getBrandById(Integer id) throws ApiException {
         BrandPojo pojo = brandDao.selectById(id);
         if(pojo==null)
-            throw new ApiException("No Brand Category present with given input"+ id);
+            throw new ApiException("No Brand Category present with given input "+ id);
         return pojo;
     }
 
@@ -33,7 +33,7 @@ public class BrandService {
     @Transactional(rollbackOn = ApiException.class)
     public List<BrandPojo> getByBrandAndCategory(String brandName,String category) throws ApiException{
         if(brandName.isEmpty() && category.isEmpty())
-            throw new ApiException("brandName & category both can't be empty");
+            return brandDao.selectAll();
         else if(brandName.isEmpty())
             return brandDao.getByCategory(category);
         else if (category.isEmpty())
@@ -43,11 +43,12 @@ public class BrandService {
         return brandList;
     }
 
+
     public List<BrandPojo> getAllBrands(){
         return brandDao.selectAll();
     }
 
-    @Transactional
+    @Transactional(rollbackOn = ApiException.class)
     public BrandPojo update(Integer id,BrandPojo inputBrand) throws ApiException {
         BrandPojo existingBrand = getBrandById(id);
         if(validate(inputBrand) && !BrandExists(inputBrand)){
@@ -67,7 +68,7 @@ public class BrandService {
     }
     private boolean BrandExists(BrandPojo inputBrand) throws ApiException {
         if (brandDao.selectByBrandCategory(inputBrand.getBrandName(), inputBrand.getCategory())!=null){
-                throw new ApiException("Brand Already Exists with name" +
+                throw new ApiException("Brand Already Exists with name = " +
                         inputBrand.getBrandName() + " and category = " + inputBrand.getCategory());
             }
         return false;

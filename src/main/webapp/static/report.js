@@ -76,5 +76,10 @@ function init(){
 	$('#get-sales-report').click(getSalesReport);
 }
 
+function highLight(){
+highlightItem("Reports")
+}
+
 $(document).ready(init);
+$(document).ready(highLight);
 

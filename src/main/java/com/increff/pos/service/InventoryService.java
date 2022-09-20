@@ -35,7 +35,7 @@ public class InventoryService {
         InventoryPojo existingPojo = get(id);
         if(quantity<=0)
             throw new ApiException("Invalid input: quantity cannot be negative");
-        existingPojo.setQuantity(existingPojo.getQuantity());
+        existingPojo.setQuantity(quantity);
 //        inventoryDao.update(existingPojo);
     }
     @Transactional

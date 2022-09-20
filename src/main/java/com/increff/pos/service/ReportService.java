@@ -60,13 +60,12 @@ public class ReportService {
         return inventoryReport;
     }
 
-    @Transactional
+    @Transactional(rollbackOn = ApiException.class)
     public List<SalesReportData> getSalesReport(SalesReportPojo salesPojo) throws ApiException{
         List<SalesReportData> salesReport = new ArrayList<>();
         List<BrandPojo> brands = brandService.getByBrandAndCategory(salesPojo.getBrand(), salesPojo.getCategory());
         for(BrandPojo brand :brands){
-            SalesReportData brandSale = new SalesReportData();
-            brandSale.setCategory(brand.getCategory());
+            SalesReportData brandSale = convertToSalesReportData(brand.getCategory(),0,0.0);
             for(OrderPojo order : getOrdersBetweenTime(salesPojo)){
                 for(OrderItemPojo item :orderitemService.getByOrderId(order.getId())){
                     if (productService.getProductById(item.getProductId()).getBrandCategory() == brand.getId()) {
@@ -80,11 +79,20 @@ public class ReportService {
         return salesReport;
     }
 
+    private SalesReportData convertToSalesReportData(String category, Integer quantity, Double revenue) {
+        SalesReportData soldBrand = new SalesReportData();
+        soldBrand.setCategory(category);
+        soldBrand.setQuantity(0);
+        soldBrand.setRevenue(0.0);
+        return soldBrand;
+    }
+
     public List<OrderPojo> getOrdersBetweenTime(SalesReportPojo salesPojo){
         List<OrderPojo> orderList = new ArrayList<>();
         for(OrderPojo order : orderService.getAllOrders()){
             ZonedDateTime orderTime= order.getDateTime();
-            if(orderTime.isAfter(salesPojo.getStartTime()) && orderTime.isBefore(salesPojo.getEndTime())){
+            if(order.getStatus().equals("completed") && orderTime.isAfter(salesPojo.getStartTime())
+                    && orderTime.isBefore(salesPojo.getEndTime())){
                 orderList.add(order);
             }
         }

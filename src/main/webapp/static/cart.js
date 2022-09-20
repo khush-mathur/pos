@@ -1,7 +1,16 @@
 
+var orderId;
 function getCartUrl(){
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
 	return baseUrl ;
+}
+
+function getOrderId(){
+var arr = window.location.href.split('/')
+return arr[arr.length-1]
+}
+function displayOrderId(){
+    document.getElementById("orderId").innerHTML = getOrderId();
 }
 
 //BUTTON ACTIONS
@@ -9,7 +18,7 @@ function addOrderItem(event){
 	//Set the values to update
 	var $form = $("#cart-form");
 	var json = toJson($form);
-	var url =  getCartUrl() + "/cart/add";
+	var url =  getCartUrl() + "/cart/add/" + getOrderId();
 
 	$.ajax({
 	   url: url,
@@ -23,13 +32,12 @@ function addOrderItem(event){
 	   },
 	   error: handleAjaxError
 	});
-
 	return false;
 }
 
 function placeOrder(){
 	//Set the values to update
-	var url =  getCartUrl() + "/order/placeOrder";
+	var url =  getCartUrl() + "/order/placeOrder/" + getOrderId();
 
 	$.ajax({
 	   url: url,
@@ -39,13 +47,31 @@ function placeOrder(){
        	'Content-Type': 'application/json'
        },
 	   success: function(response) {
-//	        alert("Order Placed successfully");
-	   		getCartItems();
+            generateInvoice(getOrderId());
+            redirectToOrderPage();
 	   },
 	   error: handleAjaxError
 	});
 
 	return false;
+}
+
+function generateInvoice(id){
+	//Set the values to update
+
+	var url =  getCartUrl() + "/order/invoice/"+id;
+	$.ajax({
+	   url: url,
+	   type: 'GET',
+	   success: function(response) {
+	    console.log(response)
+	   },
+	   error: handleAjaxError
+	});
+}
+
+function redirectToOrderPage(){
+window.location.href = "/pos/ui/order"
 }
 function updateOrderItem(event){
 	$('#edit-cart-modal').modal('toggle');
@@ -75,7 +101,7 @@ function updateOrderItem(event){
 
 
 function getCartItems(){
-	var url = getCartUrl() + "/cart/viewCart";
+	var url = getCartUrl() + "/order/view/"+ getOrderId();
 	$.ajax({
 	   url: url,
 	   type: 'GET',
@@ -86,9 +112,8 @@ function getCartItems(){
 	});
 }
 
-function deleteCart(id){
+function deleteCartItem(id){
 	var url = getCartUrl() + "/cart/delete/" + id;
-
 	$.ajax({
 	   url: url,
 	   type: 'DELETE',
@@ -156,24 +181,33 @@ function downloadErrors(){
 
 //UI DISPLAY METHODS
 
+var totalAmount =0;
 function displayCartItems(data){
 	var $tbody = $('#cart-table').find('tbody');
 	$tbody.empty();
 	for(var i in data){
 		var e = data[i];
-		var buttonHtml = '<button onclick="deleteCart(' + e.id + ')">delete</button>'
-		buttonHtml += ' <button onclick="displayEditCart(' + e.id + ')">edit</button>'
+		var buttonHtml =" <button class = 'btn btn-outline-secondary mr3 btn-sm' onclick='displayEditCart(" + e.id + ")'>edit</button>"
+		 buttonHtml += "<button class = 'btn btn-outline-danger btn-sm' onclick='deleteCartItem(" + e.id + ")'>delete</button>"
+		var amount = e.sellingPrice*e.quantity
 		var row = '<tr>'
 		+ '<td>' + e.id + '</td>'
 		+ '<td>' + e.barcode + '</td>'
 		+ '<td>'  + e.quantity + '</td>'
 		+ '<td>'  + e.sellingPrice + '</td>'
+		+ '<td>'  + amount + '</td>'
 		+ '<td>' + buttonHtml + '</td>'
 		+ '</tr>';
+		totalAmount +=amount;
         $tbody.append(row);
+        displayTotal();
 	}
 }
 
+function setOrderId(id){
+ this.orderId = id;
+ console.log(orderId);
+}
 
 function displayEditCart(id){
 	var url = getCartUrl() + "/cart/view/" + id;
@@ -218,10 +252,16 @@ function displayUploadData(){
 }
 
 function displayCart(data){
-	$("#cart-edit-form input[name=cartName]").val(data.cartName);
-	$("#cart-edit-form input[name=category]").val(data.category);
+	$("#cart-edit-form input[name=quantity]").val(data.quantity);
+	$("#cart-edit-form input[name=orderId]").val(data.orderId);
 	$("#cart-edit-form input[name=id]").val(data.id);
+	$("#cart-edit-form input[name=productId]").val(data.productId);
+	$("#cart-edit-form input[name=barcode]").val(data.barcode);
 	$('#edit-cart-modal').modal('toggle');
+}
+
+function displayTotal(){
+    document.getElementById("total").innerHTML = totalAmount;
 }
 
 
@@ -242,5 +282,7 @@ function handleAjaxError(response){
 }
 
 $(document).ready(init);
-$(document).ready(getCartItems);
-
+$(document).ready(getOrderId());
+$(document).ready(displayOrderId());
+$(document).ready(displayTotal());
+$(document).ready(getCartItems());

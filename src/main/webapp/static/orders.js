@@ -3,14 +3,35 @@ function getOrderUrl(){
 	return baseUrl;
 }
 
+
+
 //BUTTON ACTIONS
 function addOrder(){
 	//Set the values to update
-	var url =  + "/ui/cart";
+	var url =  getOrderUrl() + "/order/new-order";
 	$.ajax({
 	   url: url,
 	   type: 'GET',
-	   success: function(response) {response},
+	   success: function(response) {
+	   console.log(response)
+	        getOrderList();
+	        goToCart(response.id);
+	   },
+	   error: handleAjaxError
+	});
+
+	return false;
+}
+function downloadInvoice(id){
+	//Set the values to update
+
+	var url =  getOrderUrl() + "/order/invoice/"+id;
+	$.ajax({
+	   url: url,
+	   type: 'GET',
+	   success: function(response) {
+	    console.log(response)
+	   },
 	   error: handleAjaxError
 	});
 
@@ -57,8 +78,7 @@ function getOrderList(){
 }
 
 function deleteOrder(id){
-	var url = getOrderUrl() + "/delete/" + id;
-
+	var url = getOrderUrl() + "/order/delete/" + id;
 	$.ajax({
 	   url: url,
 	   type: 'DELETE',
@@ -131,14 +151,27 @@ function displayOrderList(data){
 	$tbody.empty();
 	for(var i in data){
 		var e = data[i];
-		var buttonHtml = ' <button onclick="displayOrderItems(' + e.id + ')">view</button>'
+		var buttonHtml = ''
+		if(e.status === 'completed'){
+		    buttonHtml = ' <button  class = "btn btn-outline-info btn-sm" onclick="displayOrderItems(' + e.id + ')">view</button>'
+		    buttonHtml += '<a href= "/pos/invoice/invoice' +e.id +'.pdf" target="_blank"><button  class = "btn btn-outline-success btn-sm">invoice</button></a>'
+		}
+		else{
+		    buttonHtml = '<button  class = "btn btn-outline-secondary btn-sm" onclick ="goToCart('+ e.id + ')"> edit </button> </a>'
+            buttonHtml += ' <button  class = "btn btn-outline-danger btn-sm" onclick="deleteOrder(' + e.id + ')">delete</button>'
+		}
 		var row = '<tr>'
 		+ '<td>' + e.id + '</td>'
 		+ '<td>' + e.dateTime + '</td>'
+		+ '<td>' + e.status + '</td>'
 		+ '<td>' + buttonHtml + '</td>'
 		+ '</tr>';
         $tbody.append(row);
 	}
+}
+
+function goToCart(id){
+    window.location.href = "/pos/ui/cart/" + id;
 }
 
 function displayOrderItems(id){
@@ -182,26 +215,34 @@ function displayUploadData(){
  	resetUploadDialog();
 	$('#upload-order-modal').modal('toggle');
 }
-
+var totalAmount =0;
 function displayOrder(data){
 	$('#view-order-modal').modal('toggle');
 	var $tbody = $('#order-item-table').find('tbody');
     	$tbody.empty();
+
     for(var i in data){
    		var e = data[i];
+   		var amount = e.sellingPrice*e.quantity
    		var row = '<tr>'
    		+ '<td>' + e.productId + '</td>'
    		+ '<td>' + e.barcode + '</td>'
     	+ '<td>' + e.quantity + '</td>'
     	+ '<td>' + e.sellingPrice + '</td>'
+    	+ '<td>'  + amount + '</td>'
     	+ '</tr>';
+    	totalAmount +=amount;
         $tbody.append(row);
     }
+    displayTotal();
+}
+function displayTotal(){
+    document.getElementById("total").innerHTML = totalAmount;
 }
 
 //INITIALIZATION CODE
 function init(){
-//	$('#add-order').click(addOrder);
+	$('#add-order').click(addOrder);
 	$('#update-order').click(updateOrder);
 	$('#refresh-data').click(getOrderList);
 	$('#upload-data').click(displayUploadData);
@@ -214,7 +255,11 @@ function handleAjaxError(response){
 	var response = JSON.parse(response.responseText);
 	alert(response.message);
 }
+function highLight(){
+highlightItem("Orders")
+}
 
 $(document).ready(init);
+$(document).ready(highLight);
 $(document).ready(getOrderList);
 

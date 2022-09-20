@@ -19,4 +19,5 @@ public class OrderPojo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private ZonedDateTime dateTime;
+    private String status;
 }

@@ -20,5 +20,4 @@ public class BrandDtoHelper {
         brandData.setId(pojo.getId());
         return brandData;
     }
-
 }

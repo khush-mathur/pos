@@ -27,9 +27,9 @@ public class OrderDto {
     @Autowired
     ProductService productService;
 
-//    public OrderData get(Integer id) throws ApiException{
-//        return OrderDtoHelper.convertToData(orderService.getById(id));
-//    }
+    public OrderData getOrder(Integer id) throws ApiException{
+        return OrderDtoHelper.convertToData(orderService.getById(id));
+    }
 
     public List<OrderData> getAll(){
         List<OrderData> orderList = new ArrayList<>();
@@ -43,17 +43,17 @@ public class OrderDto {
         return OrderDtoHelper.convertToData(orderService.addOrder());
     }
 
-    public List<OrderItemData> placeOrder() throws ApiException{
+    public List<OrderItemData> placeOrder(Integer orderId) throws ApiException{
         List<OrderItemData> itemDataList = new ArrayList<>();
-        OrderData newOrder = addNewOrder();
-        List<OrderItemPojo> pojoList = orderItemService.placeOrder(newOrder.getId());
+        List<OrderItemPojo> pojoList = orderItemService.placeOrder(orderId);
         for (OrderItemPojo pojo :pojoList){
             itemDataList.add(OrderItemDtoHelper.convertToData(pojo));
         }
+        orderService.updateOrderStatus(orderId);
         return itemDataList;
     }
 
-    public List<OrderItemData> getByOrderId(Integer id) throws ApiException {
+    public List<OrderItemData> getItemListByOrderId(Integer id) throws ApiException {
         List<OrderItemData> orderItemList = new ArrayList<>();
         for(OrderItemPojo pojo: orderItemService.getByOrderId(id)) {
             OrderItemData orderItem = OrderItemDtoHelper.convertToData(pojo);
@@ -72,10 +72,14 @@ public class OrderDto {
 
     public void generateInvoice(int orderId) throws ApiException {
         List<OrderItemData> orderItemList = new ArrayList<>();
-        for(OrderItemPojo pojo :orderItemService.getByOrderId(orderId)){
+        for (OrderItemPojo pojo : orderItemService.getByOrderId(orderId)) {
             orderItemList.add(OrderItemDtoHelper.convertToData(pojo));
         }
-        orderService.getOrderInvoice(orderId,orderItemList);
+        orderService.getOrderInvoice(orderId, orderItemList);
+    }
 
+    public void deleteOrder(Integer id) {
+        orderItemService.deleteByOrderId(id);
+        orderService.deleteOrder(id);
     }
 }

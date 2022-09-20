@@ -9,8 +9,16 @@
 <nav th:replace="snippets.html :: name_app_navbar"></nav>
 
 <div class="container">
-
-    <h3>Cart</h3>
+    <h3>Order Items</h3>
+    <div class="inline-block float-right" >
+        <label for="orderId">Order Id:</label>
+        <span class="col-sm-10" id = "orderId" name = "orderId">
+        </span>
+    </div>
+    <div class="row">
+        &nbsp;
+    </div>
+    <hr>
 
 
     <!-- Top row with form-->
@@ -29,8 +37,8 @@
                         <input type="text" class="form-control" name="quantity" id="inputQuantity" placeholder="Enter Quantity">
                     </div>
                 </div>
-                <button type="button" class="btn btn-primary" id="add-cart">Add</button>
-                <button type="button" class="btn btn-primary" id="place-order">Place Order</button>
+                <button type="button" class="btn btn-outline-primary page-button" id="add-cart">Add</button>
+                <button type="button" class="btn btn-outline-primary page-button" id="place-order">Place Order</button>
             </form>
         </div>
     </div>
@@ -51,6 +59,7 @@
                     <th scope="col">Barcode</th>
                     <th scope="col">Quantity</th>
                     <th scope="col">Mrp</th>
+                    <th scope="col">Amount</th>
                     <th scope="col">Actions</th>
                 </tr>
                 </thead>
@@ -60,6 +69,11 @@
             </table>
 
         </div>
+    </div>
+    <div class="inline-block float-right bg-light p-2 " >
+        <label for="total">Total Amount :</label>
+        <span class="col-sm-10" id = "total" name = "total">
+        </span>
     </div>
 
     <!-- cart Edit Modal -->
@@ -75,61 +89,36 @@
                 <div class="modal-body">
                     <form class="form-inline" id="cart-edit-form">
                         <div class="form-group">
-                            <label for="inputcart" class="col-sm-2 col-form-label">cart name</label>
+                            <label for="productId" class="col-sm-2 col-form-label">Product Id</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" name="cartName" placeholder="enter cart name">
+                                <input name="productId" class="form-control" id="productId" readonly>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="inputCategory" class="col-sm-2 col-form-label">Category</label>
+                            <label for="barcode" class="col-sm-2 col-form-label">Barcode</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" name="category" placeholder="enter category">
+                                <input name="barcode" class="form-control" id="barcode" readonly>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputQuantity" class="col-sm-2 col-form-label">Quantity</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="quantity" placeholder="Enter Quantity">
                             </div>
                         </div>
                         <input type="hidden" name="id" >
+                        <input type="hidden" name="orderId" >
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary" id="update-cart">Update</button>
+                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-outline-primary" id="update-cart">Update</button>
                 </div>
             </div>
         </div>
     </div>
 
 
-    <!-- Employee Edit Modal -->
-    <div class="modal" tabindex="-1" role="dialog" id="upload-employee-modal">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-
-                <div class="modal-header">
-                    <h5 class="modal-title">Upload carts</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-
-                <div class="modal-body">
-                    <div class="employee-file">
-                        <input type="file" class="custom-file-input" id="cartFile">
-                        <label class="custom-file-label" for="cartFile" id="cartFileName">Choose file</label>
-                    </div>
-                    <a th:href="@{/sample/cart.tsv}" target="_blank">Download Sample</a>
-                    <br>
-                    Rows: <span id="rowCount">0</span>,
-                    Processed: <span id="processCount">0</span>,
-                    Errors: <span id="errorCount">0</span>
-                </div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary" id="process-data">Upload</button>
-                    <button type="button" class="btn btn-warning" id="download-errors">Download Errors</button>
-                </div>
-            </div>
-        </div>
-    </div>
 
 </div> <!-- Container end-->
 

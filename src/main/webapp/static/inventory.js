@@ -29,7 +29,8 @@ function addInventory(event){
 function updateInventory(event){
 	$('#edit-inventory-modal').modal('toggle');
 	//Get the ID
-	var id = $("#inventory-edit-form input[name=id]").val();
+	var id = $("#inventory-edit-form input[name=productId]").val();
+	var quantity = $("#inventory-edit-form input[name=quantity]").val();
 	var url = getInventoryUrl() + "/update/" + id;
 
 	//Set the values to update
@@ -39,7 +40,7 @@ function updateInventory(event){
 	$.ajax({
 	   url: url,
 	   type: 'PUT',
-	   data: json,
+	   data: quantity,
 	   headers: {
        	'Content-Type': 'application/json'
        },	   
@@ -139,8 +140,7 @@ function displayInventoryList(data){
 	$tbody.empty();
 	for(var i in data){
 		var e = data[i];
-		var buttonHtml = '<button onclick="deleteInventory(' + e.id + ')">delete</button>'
-		buttonHtml += ' <button onclick="displayEditInventory(' + e.id + ')">edit</button>'
+		var buttonHtml = ' <button class = "btn btn-outline-secondary btn-sm" onclick="displayEditInventory(' + e.productId + ')">edit</button>'
 		var row = '<tr>'
 		+ '<td>' + e.productId + '</td>'
 		+ '<td>' + e.quantity + '</td>'
@@ -193,9 +193,8 @@ function displayUploadData(){
 }
 
 function displayInventory(data){
-	$("#inventory-edit-form input[name=inventoryName]").val(data.inventoryName);
-	$("#inventory-edit-form input[name=category]").val(data.category);
-	$("#inventory-edit-form input[name=id]").val(data.id);
+	$("#inventory-edit-form input[name=productId]").val(data.productId);
+	$("#inventory-edit-form input[name=quantity]").val(data.quantity);
 	$('#edit-inventory-modal').modal('toggle');
 }
 
@@ -215,7 +214,11 @@ function handleAjaxError(response){
 	var response = JSON.parse(response.responseText);
 	alert(response.message);
 }
+function highLight(){
+highlightItem("Inventory")
+}
 
 $(document).ready(init);
+$(document).ready(highLight);
 $(document).ready(getInventoryList);
 

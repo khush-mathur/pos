@@ -26,13 +26,13 @@ public class ProductController {
 
     @ApiOperation(value = "Fetch Product")
     @RequestMapping(path = "/view/{id}", method = RequestMethod.GET)
-    public ProductData get(@PathVariable Integer id) {
+    public ProductData get(@PathVariable Integer id) throws ApiException {
         return productDto.get(id);
     }
 
     @ApiOperation(value ="Fetches all the products")
     @RequestMapping(path = "/viewAll",method = RequestMethod.GET)
-    public List<ProductData> getAll(){
+    public List<ProductData> getAll() throws ApiException{
         return productDto.getAll();
     }
 

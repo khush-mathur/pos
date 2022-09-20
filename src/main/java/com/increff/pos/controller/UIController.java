@@ -1,9 +1,8 @@
 package com.increff.pos.controller;
 
-import com.increff.pos.model.InfoData;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -12,9 +11,6 @@ public class UIController {
 
     @Value("${app.baseUrl}")
     private String baseUrl;
-
-    @Autowired
-    InfoData info;
 
     @RequestMapping(value = "/ui/home")
     public ModelAndView home() {
@@ -46,16 +42,19 @@ public class UIController {
         return mav("report.html");
     }
 
-    @RequestMapping(value = "/ui/cart")
-    public ModelAndView cart() {
+    @RequestMapping(value = "/ui/cart/{orderId}")
+    public ModelAndView cart(@PathVariable Integer orderId) {
         return mav("cart.html");
+    }
+
+    @RequestMapping(value = "/ui/invoice-path/{orderId}")
+    public ModelAndView getInvoice(@PathVariable Integer orderId) {
+        return mav("invoice"+orderId+".pdf");
     }
 
     private ModelAndView mav(String page) {
 
-        info.setEmail("");
         ModelAndView mav = new ModelAndView(page);
-        mav.addObject("info", new InfoData());
         mav.addObject("baseUrl", baseUrl);
         return mav;
     }

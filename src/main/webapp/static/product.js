@@ -9,7 +9,6 @@ function addProduct(event){
 	var $form = $("#product-form");
 	var json = toJsonArray($form);
 	var url = getProductUrl() + "/create";
-    console.log(json);
 	$.ajax({
 	   url: url,
 	   type: 'POST',
@@ -30,7 +29,6 @@ function updateProduct(event){
 	$('#edit-product-modal').modal('toggle');
 	//Get the ID
 	var id = $("#product-edit-form input[name=id]").val();
-	console.log(id);
 	var url = getProductUrl() + "/update/" + id;
 
 	//Set the values to update
@@ -109,7 +107,6 @@ function uploadRows(){
 
 	var json = JSON.stringify([row]);
 	var url = getProductUrl() + "/create";
-
 	//Make ajax call
 	$.ajax({
 	   url: url,
@@ -141,14 +138,14 @@ function displayProductList(data){
 	$tbody.empty();
 	for(var i in data){
 		var e = data[i];
-		var buttonHtml = '<button onclick="deleteProduct(' + e.id + ')">delete</button>'
-		buttonHtml += ' <button onclick="displayEditProduct(' + e.id + ')">edit</button>'
+		var buttonHtml =  ' <button class = "btn btn-outline-secondary btn-sm" onclick="displayEditProduct(' + e.id + ')">edit</button>'
 		var row = '<tr>'
 		+ '<td>' + e.id + '</td>'
 		+ '<td>' + e.name + '</td>'
 		+ '<td>' + e.barcode + '</td>'
 		+ '<td>'  + e.mrp + '</td>'
-		+ '<td>' + e.brandCategory + '</td>'
+		+ '<td>' + e.brandName + '</td>'
+		+ '<td>' + e.category + '</td>'
 		+ '<td>' + buttonHtml + '</td>'
 		+ '</tr>';
         $tbody.append(row);
@@ -201,7 +198,8 @@ function displayProduct(data){
 	$("#product-edit-form input[name=name]").val(data.name);
 	$("#product-edit-form input[name=mrp]").val(data.mrp);
 	$("#product-edit-form input[name=barcode]").val(data.barcode);
-	$("#product-edit-form input[name=brandCategory]").val(data.brandCategory);
+	$("#product-edit-form input[name=brandName]").val(data.brandName);
+	$("#product-edit-form input[name=category]").val(data.category);
 	$("#product-edit-form input[name=id]").val(data.id);
 	$('#edit-product-modal').modal('toggle');
 }
@@ -223,6 +221,11 @@ function handleAjaxError(response){
 	alert(response.message);
 }
 
+function highLight(){
+highlightItem("Products")
+}
+
 $(document).ready(init);
+$(document).ready(highLight);
 $(document).ready(getProductList);
 

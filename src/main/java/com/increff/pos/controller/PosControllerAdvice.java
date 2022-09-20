@@ -15,6 +15,7 @@ public class PosControllerAdvice {
     public MessageData handle(ApiException e) {
         MessageData data = new MessageData();
         data.setMessage(e.getMessage());
+        e.printStackTrace();
         return data;
     }
 
@@ -23,6 +24,13 @@ public class PosControllerAdvice {
     public MessageData handle(Throwable e) {
         MessageData data = new MessageData();
         data.setMessage("An unknown error has occurred - " + e.getMessage());
+        e.printStackTrace();
+        return data;
+    }
+    @ResponseStatus(HttpStatus.CREATED)
+    public MessageData handle() {
+        MessageData data = new MessageData();
+        data.setMessage("Successfully Added");
         return data;
     }
 }

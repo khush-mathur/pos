@@ -9,9 +9,10 @@ public class OrderDtoHelper {
     public static OrderData convertToData(OrderPojo pojo) {
         OrderData orderData = new OrderData();
         orderData.setId(pojo.getId());
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy - HH:mm:ss Z");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy - HH:mm:ss");
         String dateTime = pojo.getDateTime().format(formatter);
         orderData.setDateTime(dateTime);
+        orderData.setStatus(pojo.getStatus());
         return orderData;
     }
 }

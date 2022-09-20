@@ -25,15 +25,10 @@ public class InventoryController {
     }
 
     @ApiOperation(value = "Updates the inventory by certain quantity")
-    @RequestMapping(path = "/update/{id}", method = RequestMethod.POST)
-    public void update(@PathVariable Integer id,@RequestBody Integer quantity) throws ApiException {
-        inventoryDto.update(id,quantity);
+    @RequestMapping(path = "/update/{productId}", method = RequestMethod.PUT)
+    public void update(@PathVariable Integer productId,@RequestBody Integer quantity) throws ApiException {
+        inventoryDto.update(productId,quantity);
     }
-//    @ApiOperation(value = "Decreases the inventory by certain quantity")
-//    @RequestMapping(path = "/remove/{id}", method = RequestMethod.POST)
-//    public void remove(@PathVariable Integer id,@RequestBody Integer quantity) throws ApiException {
-//        inventoryDto.remove(id,quantity);
-//    }
 
     @ApiOperation(value = "Adds Inventory for a Product")
     @RequestMapping(path = "/create", method = RequestMethod.POST)

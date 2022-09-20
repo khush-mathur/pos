@@ -18,6 +18,8 @@ public class OrderItemDtoHelper {
 
     public static OrderItemPojo convertToPojo(OrderItemForm orderItemForm) {
         OrderItemPojo pojo = new OrderItemPojo();
+        pojo.setOrderId(orderItemForm.getOrderId());
+        pojo.setProductId(orderItemForm.getProductId());
         pojo.setQuantity(orderItemForm.getQuantity());
         return pojo;
     }

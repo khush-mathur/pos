@@ -10,7 +10,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @EnableWebMvc
 @Configuration
 @EnableTransactionManagement
-@ComponentScan("com.increff.pos")
+@ComponentScan("com")
 @PropertySources({
         @PropertySource(value = "file:./config.properties", ignoreResourceNotFound = true)
 })
