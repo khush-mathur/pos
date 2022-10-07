@@ -15,18 +15,20 @@ public class InventoryService {
     @Autowired
     InventoryDao inventoryDao;
 
-    public InventoryPojo get(Integer productId) throws ApiException{
-        InventoryPojo pojo = inventoryDao.get(productId);
+    public InventoryPojo get(Integer id) throws ApiException{
+        InventoryPojo pojo = inventoryDao.getByProductId(id);
         if(pojo == null)
-            throw new ApiException("No product with id " + productId + " present in inventory");
+            throw new ApiException("No such product present in inventory");
         return pojo;
     }
 
     @Transactional
-    public void addInInventory(InventoryPojo pojo) throws ApiException{
-        if (inventoryDao.get(pojo.getProductId())!=null)
-            throw new ApiException("Product already Exists in Inventory");
-        inventoryDao.add(pojo);
+    public void addInInventory(InventoryPojo pojo) {
+        InventoryPojo inventory = inventoryDao.getByProductId(pojo.getProductId());
+        if (inventoryDao.getByProductId(pojo.getProductId())==null)
+           inventoryDao.add(pojo);
+        else
+            inventory.setQuantity(pojo.getQuantity());
     }
 
 

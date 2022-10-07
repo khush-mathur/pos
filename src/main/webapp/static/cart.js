@@ -48,6 +48,7 @@ function placeOrder(){
        },
 	   success: function(response) {
             generateInvoice(getOrderId());
+            $.notify("Order has been placed", "success");
             redirectToOrderPage();
 	   },
 	   error: handleAjaxError
@@ -91,6 +92,7 @@ function updateOrderItem(event){
        	'Content-Type': 'application/json'
        },	   
 	   success: function(response) {
+            $.notify("Order Item Updated ", "success");
 	   		getCartItems();
 	   },
 	   error: handleAjaxError
@@ -118,6 +120,7 @@ function deleteCartItem(id){
 	   url: url,
 	   type: 'DELETE',
 	   success: function(data) {
+	        $.notify("Removed", "success");
 	   		getCartItems();
 	   },
 	   error: handleAjaxError
@@ -191,7 +194,7 @@ function displayCartItems(data){
 		 buttonHtml += "<button class = 'btn btn-outline-danger btn-sm' onclick='deleteCartItem(" + e.id + ")'>delete</button>"
 		var amount = e.sellingPrice*e.quantity
 		var row = '<tr>'
-		+ '<td>' + e.id + '</td>'
+		+ '<td>' + e.productName + '</td>'
 		+ '<td>' + e.barcode + '</td>'
 		+ '<td>'  + e.quantity + '</td>'
 		+ '<td>'  + e.sellingPrice + '</td>'
@@ -274,11 +277,6 @@ function init(){
 	$('#process-data').click(processData);
 	$('#download-errors').click(downloadErrors);
     $('#cartFile').on('change', updateFileName)
-}
-
-function handleAjaxError(response){
-	var response = JSON.parse(response.responseText);
-	alert(response.message);
 }
 
 $(document).ready(init);

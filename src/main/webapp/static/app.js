@@ -26,8 +26,10 @@ function toJsonArray($form){
 }
 
 function handleAjaxError(response){
-	var response = JSON.parse(response.responseText);
-	alert(response.message);
+//	var response = JSON.parse(response.responseText);
+//	alert(response.message);
+    $('.notifyjs-corner').empty();
+    $.notify(response['responseJSON']['message'], { autoHide: false });
 }
 
 function readFileData(file, callback){
@@ -67,8 +69,6 @@ function writeFileData(arr,fileName){
 function highlightItem(head_name) {
     let elements = document.getElementsByClassName('nav-link');
     Array.from(elements).forEach(element => {
-        console.log(element.className);
-        console.log(element);
         if (element.text == head_name) {
             element.classList.add("active");
         } else {

@@ -56,11 +56,11 @@ function updateOrder(event){
        	'Content-Type': 'application/json'
        },
 	   success: function(response) {
+	        $.notify("Order Updated", "success");
 	   		getOrderList();
 	   },
 	   error: handleAjaxError
 	});
-
 	return false;
 }
 
@@ -83,6 +83,7 @@ function deleteOrder(id){
 	   url: url,
 	   type: 'DELETE',
 	   success: function(data) {
+	   $.notify("Order deleted", "success");
 	   		getOrderList();
 	   },
 	   error: handleAjaxError
@@ -225,7 +226,7 @@ function displayOrder(data){
    		var e = data[i];
    		var amount = e.sellingPrice*e.quantity
    		var row = '<tr>'
-   		+ '<td>' + e.productId + '</td>'
+   		+ '<td>' + e.productName + '</td>'
    		+ '<td>' + e.barcode + '</td>'
     	+ '<td>' + e.quantity + '</td>'
     	+ '<td>' + e.sellingPrice + '</td>'
@@ -251,10 +252,6 @@ function init(){
     $('#orderFile').on('change', updateFileName)
 }
 
-function handleAjaxError(response){
-	var response = JSON.parse(response.responseText);
-	alert(response.message);
-}
 function highLight(){
 highlightItem("Orders")
 }

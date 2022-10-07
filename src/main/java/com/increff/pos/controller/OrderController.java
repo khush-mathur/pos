@@ -23,8 +23,8 @@ public class OrderController {
 
     @ApiOperation(value = "Place the order")
     @RequestMapping(path="/placeOrder/{orderId}",method = RequestMethod.POST)
-    public List<OrderItemData> placeOrder(@PathVariable Integer orderId) throws ApiException{
-        return orderDto.placeOrder(orderId);
+    public void placeOrder(@PathVariable Integer orderId) throws ApiException{
+        orderDto.placeOrder(orderId);
     }
 
     @ApiOperation(value = "Gets list of all Orders")

@@ -24,7 +24,7 @@ public class ProductDto {
     public void add(List<ProductForm> productList) throws ApiException{
         for(ProductForm product:productList) {
             ProductPojo pojo = ProductDtoHelper.convertToProductPojo(product);
-            if(validateInput(pojo) && brandService.getBrandById(pojo.getBrandCategory())!=null) {
+            if(validateInput(pojo) || brandService.getBrandById(pojo.getBrandCategory())!=null) {
                     productService.add(normalise(pojo));
             }
             else {

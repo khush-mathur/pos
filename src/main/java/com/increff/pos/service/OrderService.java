@@ -40,11 +40,6 @@ public class OrderService {
         return orderDao.selectAll();
     }
 
-    @Transactional
-    public void add(OrderPojo order) throws ApiException {
-            orderDao.add(order);
-    }
-
     @Transactional(rollbackFor = ApiException.class)
     public OrderPojo addOrder() {
         OrderPojo pojo = new OrderPojo();
@@ -63,6 +58,7 @@ public class OrderService {
         InvoiceData invoiceData = new InvoiceData(orderItemDataList, time, total, orderId);
         String invoice = "main/webapp/invoice/invoice" + orderId + ".pdf";
         String xml = jaxbObjectToXML(invoiceData);
+        System.out.println(xml);
         File xsltFile = new File("src", "main/resources/com/increff/pos/invoice.xml");
         File pdfFile = new File("src", invoice);
         try {
@@ -72,17 +68,16 @@ public class OrderService {
         }
     }
     private static String jaxbObjectToXML(InvoiceData invoiceData) {
+        StringWriter stringWriter = new StringWriter();
         try {
             JAXBContext jaxbContext = JAXBContext.newInstance(InvoiceData.class);
             Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
             jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-            StringWriter stringWriter = new StringWriter();
             jaxbMarshaller.marshal(invoiceData, stringWriter);
-            return stringWriter.toString();
         } catch (JAXBException e) {
             e.printStackTrace();
         }
-        return "";
+        return stringWriter.toString();
     }
 
     private void convertToPDF(File xslt, File pdf, String xml) throws ApiException, IOException {

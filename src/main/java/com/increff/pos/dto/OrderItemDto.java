@@ -30,8 +30,10 @@ public class OrderItemDto {
     public List<OrderItemData> getCartItems() throws ApiException {
         List<OrderItemData> orderItemList = new ArrayList<>();
         for(OrderItemPojo pojo: orderItemService.getCartItem()) {
+            ProductPojo product = productService.getProductById(pojo.getProductId());
             OrderItemData itemData = OrderItemDtoHelper.convertToData(pojo);
-            itemData.setBarcode(productService.getProductById(pojo.getProductId()).getBarcode());
+            itemData.setBarcode(product.getBarcode());
+            itemData.setProductName(product.getName());
             orderItemList.add(itemData);
         }
         return orderItemList;
@@ -79,8 +81,10 @@ public class OrderItemDto {
         OrderItemPojo pojo = orderItemService.getOrderItemById(id);
         if(pojo==null)
             throw new ApiException("No order Item by given Id is present");
+        ProductPojo product = productService.getProductById(pojo.getProductId());
         OrderItemData orderItem =   OrderItemDtoHelper.convertToData(pojo);
-        orderItem.setBarcode(productService.getProductById(orderItem.getProductId()).getBarcode());
+        orderItem.setBarcode(product.getBarcode());
+        orderItem.setProductName(product.getName());
         return orderItem;
     }
 }

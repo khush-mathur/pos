@@ -60,15 +60,20 @@ public class ReportDto {
         pojo.setCategory(pojo.getCategory().trim().toLowerCase());
         return pojo;
     }
+
+    /**
+     *
+     * TODO :: check this
+     */
     private boolean validateInput(SalesReportForm inputForm) throws ApiException {
         if(inputForm.getStartDate()==null)
             throw new ApiException("Please enter a valid Start Date");
         else if(inputForm.getEndDate()==null)
             throw new ApiException("Please enter a valid End Date");
-        else if (brandService.getByBrandAndCategory(inputForm.getBrand(),"%") == null)
+        else if (brandService.getByBrandAndCategory(inputForm.getBrand(),"") == null)
             throw new ApiException("Please enter a valid Brand Name");
-        else if(brandService.getByBrandAndCategory("%", inputForm.getCategory())==null)
-            throw new ApiException("Please enter a valid Category");
+        else if (brandService.getByBrandAndCategory("",inputForm.getCategory()) == null)
+            throw new ApiException("Please enter a valid category Name");
         return true;
     }
 }

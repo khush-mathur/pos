@@ -22,25 +22,27 @@
                 <div class="form-group mb-3 w-50">
                     <label for="inputProduct" class="col-sm-2 col-form-label">Name</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" name="name" id="inputProduct" placeholder="Enter Product Name">
+                        <input type="text" class="form-control col-sm-7" name="name" id="inputProduct" placeholder="Enter Product Name">
                     </div>
                 </div>
                 <div class="form-group mb-3 w-50">
                     <label for="inputBarcode" class="col-sm-2 col-form-label">Barcode</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" name="barcode" id="inputBarcode" placeholder="Enter Barcode">
+                        <input type="text" class="form-control col-sm-7" name="barcode" id="inputBarcode" placeholder="Enter Barcode">
                     </div>
                 </div>
                 <div class="form-group mb-3 w-50">
-                    <label for="inputBrandCategory" class="col-sm-2 col-form-label">Brand-Category</label>
+                    <label for="brand_cat_id_dropdown" class="col-sm-2 col-form-label">Brand</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" name="brandCategory" id="inputBrandCategory" placeholder="Enter Brand-Category">
+                    <select class="form-select form-control col-sm-7" name="brandCategory" aria-label="Select Brand Category" id="brand_cat_id_dropdown">
+                       <option value="" disabled selected>Select Brand Category</option>
+                    </select>
                     </div>
                 </div>
                 <div class="form-group mb-3 w-50">
                     <label for="inputMrp" class="col-sm-2 col-form-label">MRP</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" name="mrp" id="inputMrp" placeholder="Enter MRP">
+                        <input type="text" class="form-control col-sm-7" name="mrp" id="inputMrp" placeholder="Enter MRP">
                     </div>
                 </div>
             </form>
@@ -61,7 +63,6 @@
             <table class="table table-striped" id="product-table">
                 <thead>
                 <tr>
-                    <th scope="col">ID</th>
                     <th scope="col">Product Name</th>
                     <th scope="col">Barcode</th>
                     <th scope="col">MRP</th>
@@ -90,31 +91,31 @@
                 <div class="modal-body">
                     <form class="form-inline" id="product-edit-form">
                         <div class="form-group">
-                            <label for="barcode" class="col-sm-2 col-form-label">Barcode :</label>
+                            <label for="barcode" class="col-sm-2 col-form-label">Barcode</label>
                             <div class="col-sm-10">
                                 <input class="form-control" id = "barcode" name="barcode" readonly>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="brandName" class="col-sm-2 col-form-label">Brand :</label>
+                            <label for="brandName" class="col-sm-2 col-form-label">Brand</label>
                             <div class="col-sm-10">
                                 <input class="form-control" name="brandName" id = "brandName" readonly>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="category" class="col-sm-2 col-form-label">Brand :</label>
+                            <label for="category" class="col-sm-2 col-form-label">Category</label>
                             <div class="col-sm-10">
                                 <input class="form-control" name="category" id = "category" readonly>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="inputName" class="col-sm-2 col-form-label">Product Name :</label>
+                            <label for="inputName" class="col-sm-2 col-form-label">Product Name</label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" name="name" id = "inputName" placeholder="Enter Product name">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="mrp" class="col-sm-2 col-form-label">MRP :</label>
+                            <label for="mrp" class="col-sm-2 col-form-label">MRP</label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" name="mrp" id = "mrp" placeholder="Enter Product Mrp">
                             </div>
@@ -170,6 +171,8 @@
 <footer th:replace="snippets.html :: name_footer"></footer>
 
 <script th:src="@{/static/product.js}"/></script>
+<script th:src="@{/static/notify.js}"/></script>
+<script th:src="@{/static/notify.min.js}"/></script>
 
 </body>
 

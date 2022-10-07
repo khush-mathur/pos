@@ -19,12 +19,12 @@
                               space-after="2mm">
                         Invoice
                     </fo:block>
-                    <fo:block font-size="12pt" text-align="center" font-family="Helvetica" font-weight="bold"
+                    <fo:block font-size="12pt" text-align="right" font-family="Helvetica" font-weight="bold"
                               space-after="5mm">
-                        Ordered on -
+                        Order Time -
                         <xsl:value-of select="orderTime"/>
                     </fo:block>
-                    <fo:block font-size="12pt" text-align="center" font-family="Helvetica" font-weight="bold"
+                    <fo:block font-size="12pt" text-align="right" font-family="Helvetica" font-weight="bold"
                               space-after="5mm">
                         Order Id-<xsl:value-of select="orderId"/>
                     </fo:block>
@@ -41,7 +41,7 @@
                                     <fo:block font-size="15pt" text-align="center" font-weight="bold">Sr. no.</fo:block>
                                 </fo:table-cell>
                                 <fo:table-cell border="1pt solid black" xsl:use-attribute-sets="tableBorder">
-                                    <fo:block font-size="15pt" text-align="center" font-weight="bold">Product Id
+                                    <fo:block font-size="15pt" text-align="center" font-weight="bold">Product Name
                                     </fo:block>
                                 </fo:table-cell>
                                 <fo:table-cell border="1pt solid black" xsl:use-attribute-sets="tableBorder">
@@ -80,7 +80,7 @@
 
             <fo:table-cell border="1pt solid black" xsl:use-attribute-sets="tableBorder">
                 <fo:block text-align="center" font-size="15pt">
-                    <xsl:value-of select="productId"/>
+                    <xsl:value-of select="productName"/>
                 </fo:block>
             </fo:table-cell>
             <fo:table-cell border="1pt solid black" xsl:use-attribute-sets="tableBorder">

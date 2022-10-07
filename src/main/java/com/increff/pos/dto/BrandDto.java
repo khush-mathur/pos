@@ -39,12 +39,11 @@ public class BrandDto {
 
 
     public List<BrandData> fetchAll() {
-        List<BrandPojo> list = brandService.getAllBrands();
-        List<BrandData> list2 = new ArrayList<>();
-        for (BrandPojo p : list) {
-            list2.add(BrandDtoHelper.convertToBrandData(p));
+        List<BrandData> dataList = new ArrayList<>();
+        for (BrandPojo p : brandService.getAllBrands()) {
+            dataList.add(BrandDtoHelper.convertToBrandData(p));
         }
-        return list2;
+        return dataList;
     }
 
     public BrandPojo update(Integer id, BrandForm brandForm) throws ApiException {
@@ -54,11 +53,7 @@ public class BrandDto {
         return brandService.update(id,normalise(brand));
     }
 
-    public void delete(Integer id) {
-        brandService.delete(id);
-    }
-
-    public BrandPojo normalise(BrandPojo brand){
+    private BrandPojo normalise(BrandPojo brand){
         brand.setBrandName(brand.getBrandName().trim().toLowerCase());
         brand.setCategory(brand.getCategory().trim().toLowerCase());
         return brand;

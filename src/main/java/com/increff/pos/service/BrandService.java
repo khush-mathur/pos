@@ -5,8 +5,9 @@ import com.increff.pos.exception.ApiException;
 import com.increff.pos.pojo.BrandPojo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +17,7 @@ public class BrandService {
     @Autowired
     BrandDao brandDao;
 
+    @Transactional(readOnly = true)
     public BrandPojo getBrandById(Integer id) throws ApiException {
         BrandPojo pojo = brandDao.selectById(id);
         if(pojo==null)
@@ -23,49 +25,43 @@ public class BrandService {
         return pojo;
     }
 
-    @Transactional(rollbackOn = ApiException.class)
+    @Transactional(rollbackFor = ApiException.class)
     public void uploadBrands(List<BrandPojo> inputBrandList) throws ApiException {
         for (BrandPojo inputBrand: inputBrandList) {
             if (validate(inputBrand) && !BrandExists(inputBrand))
                 brandDao.insert(inputBrand);
         }
     }
-    @Transactional(rollbackOn = ApiException.class)
+    @Transactional(rollbackFor = ApiException.class)
     public List<BrandPojo> getByBrandAndCategory(String brandName,String category) throws ApiException{
         if(brandName.isEmpty() && category.isEmpty())
             return brandDao.selectAll();
         else if(brandName.isEmpty())
-            return brandDao.getByCategory(category);
+            return brandDao.selectByCategory(category);
         else if (category.isEmpty())
-            return brandDao.getByBrand(brandName);
+            return brandDao.selectByBrand(brandName);
         List<BrandPojo> brandList = new ArrayList<>();
-        brandList.add(brandDao.selectByBrandCategory(brandName,category));
+        BrandPojo brand = brandDao.selectByBrandCategory(brandName,category);
+        if()
+        brandList.add(brand);
         return brandList;
     }
 
-
+    @Transactional(readOnly = true)
     public List<BrandPojo> getAllBrands(){
         return brandDao.selectAll();
     }
 
-    @Transactional(rollbackOn = ApiException.class)
+    @Transactional(rollbackFor = ApiException.class)
     public BrandPojo update(Integer id,BrandPojo inputBrand) throws ApiException {
         BrandPojo existingBrand = getBrandById(id);
         if(validate(inputBrand) && !BrandExists(inputBrand)){
             existingBrand.setBrandName(inputBrand.getBrandName());
             existingBrand.setCategory(inputBrand.getCategory());
-//            brandDao.update(existingBrand);
         }
         return existingBrand;
     }
 
-    /**
-     *
-     * TODO:: handle deletion of product also with checking whether id exists or not.
-     */
-    public void delete(Integer id) {
-        brandDao.delete(id);
-    }
     private boolean BrandExists(BrandPojo inputBrand) throws ApiException {
         if (brandDao.selectByBrandCategory(inputBrand.getBrandName(), inputBrand.getCategory())!=null){
                 throw new ApiException("Brand Already Exists with name = " +

@@ -18,6 +18,7 @@ function addInventory(event){
        	'Content-Type': 'application/json'
        },	   
 	   success: function(response) {
+	   $.notify("Inventory Added", "success");
 	   		getInventoryList();
 	   },
 	   error: handleAjaxError
@@ -29,9 +30,9 @@ function addInventory(event){
 function updateInventory(event){
 	$('#edit-inventory-modal').modal('toggle');
 	//Get the ID
-	var id = $("#inventory-edit-form input[name=productId]").val();
+	var barcode = $("#inventory-edit-form input[name=barcode]").val();
 	var quantity = $("#inventory-edit-form input[name=quantity]").val();
-	var url = getInventoryUrl() + "/update/" + id;
+	var url = getInventoryUrl() + "/update/" + barcode;
 
 	//Set the values to update
 	var $form = $("#inventory-edit-form");
@@ -45,13 +46,13 @@ function updateInventory(event){
        	'Content-Type': 'application/json'
        },	   
 	   success: function(response) {
+	        $.notify("Inventory Updated", "success");
 	   		getInventoryList();
 	   },
 	   error: handleAjaxError
 	});
 	return false;
 }
-
 
 function getInventoryList(){
 	var url = getInventoryUrl() + "/viewAll";
@@ -64,19 +65,6 @@ function getInventoryList(){
 	   error: handleAjaxError
 	});
 }
-
-//function deleteInventory(id){
-//	var url = getInventoryUrl() + "/delete/" + id;
-//
-//	$.ajax({
-//	   url: url,
-//	   type: 'DELETE',
-//	   success: function(data) {
-//	   		getInventoryList();
-//	   },
-//	   error: handleAjaxError
-//	});
-//}
 
 // FILE UPLOAD METHODS
 var fileData = [];
@@ -140,9 +128,10 @@ function displayInventoryList(data){
 	$tbody.empty();
 	for(var i in data){
 		var e = data[i];
-		var buttonHtml = ' <button class = "btn btn-outline-secondary btn-sm" onclick="displayEditInventory(' + e.productId + ')">edit</button>'
+		var buttonHtml = ' <button class = "btn btn-outline-secondary btn-sm" onclick="displayEditInventory('+"'" + e.barcode + "'" + ')">edit</button>'
 		var row = '<tr>'
-		+ '<td>' + e.productId + '</td>'
+		+ '<td>' + e.productName + '</td>'
+		+ '<td>' + e.barcode + '</td>'
 		+ '<td>' + e.quantity + '</td>'
 		+ '<td>' + buttonHtml + '</td>'
 		+ '</tr>';
@@ -193,7 +182,10 @@ function displayUploadData(){
 }
 
 function displayInventory(data){
-	$("#inventory-edit-form input[name=productId]").val(data.productId);
+console.log(data.barcode);
+console.log(data.productName);
+	$("#inventory-edit-form input[name=barcode]").val(data.barcode);
+	$("#inventory-edit-form input[name=productName]").val(data.productName);
 	$("#inventory-edit-form input[name=quantity]").val(data.quantity);
 	$('#edit-inventory-modal').modal('toggle');
 }
@@ -210,10 +202,6 @@ function init(){
     $('#inventoryFile').on('change', updateFileName)
 }
 
-function handleAjaxError(response){
-	var response = JSON.parse(response.responseText);
-	alert(response.message);
-}
 function highLight(){
 highlightItem("Inventory")
 }

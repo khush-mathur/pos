@@ -9,6 +9,7 @@ function addProduct(event){
 	var $form = $("#product-form");
 	var json = toJsonArray($form);
 	var url = getProductUrl() + "/create";
+	console.log(json);
 	$.ajax({
 	   url: url,
 	   type: 'POST',
@@ -17,6 +18,7 @@ function addProduct(event){
        	'Content-Type': 'application/json'
        },
 	   success: function(response) {
+	        $.notify("New Product Added", "success");
 	   		getProductList();
 	   },
 	   error: handleAjaxError
@@ -43,6 +45,7 @@ function updateProduct(event){
        	'Content-Type': 'application/json'
        },
 	   success: function(response) {
+	        $.notify("Product Updated", "success");
 	   		getProductList();
 	   },
 	   error: handleAjaxError
@@ -59,19 +62,6 @@ function getProductList(){
 	   type: 'GET',
 	   success: function(data) {
 	   		displayProductList(data);
-	   },
-	   error: handleAjaxError
-	});
-}
-
-function deleteProduct(id){
-	var url = getProductUrl() + "/delete/" + id;
-
-	$.ajax({
-	   url: url,
-	   type: 'DELETE',
-	   success: function(data) {
-	   		getProductList();
 	   },
 	   error: handleAjaxError
 	});
@@ -140,7 +130,6 @@ function displayProductList(data){
 		var e = data[i];
 		var buttonHtml =  ' <button class = "btn btn-outline-secondary btn-sm" onclick="displayEditProduct(' + e.id + ')">edit</button>'
 		var row = '<tr>'
-		+ '<td>' + e.id + '</td>'
 		+ '<td>' + e.name + '</td>'
 		+ '<td>' + e.barcode + '</td>'
 		+ '<td>'  + e.mrp + '</td>'
@@ -150,6 +139,24 @@ function displayProductList(data){
 		+ '</tr>';
         $tbody.append(row);
 	}
+}
+function displayBrandCategory(){
+$.ajax({
+        url: $("meta[name=baseUrl]").attr("content") + "/brand/viewAll",
+        type: 'GET',
+        success: function (data) {
+            window.data = data;
+            var list = $('#brand_cat_id_dropdown');
+            list.children('option:not(:first)').remove();
+            for (var i in data) {
+                var item = '<option value="' + data[i].id + '">' +
+                    data[i].brandName + ' , ' + data[i].category +
+                    '</option>';
+                list.append(item);
+            }
+        },
+        error: handleAjaxError
+    });
 }
 
 function displayEditProduct(id){
@@ -228,4 +235,5 @@ highlightItem("Products")
 $(document).ready(init);
 $(document).ready(highLight);
 $(document).ready(getProductList);
+$(document).ready(displayBrandCategory);
 

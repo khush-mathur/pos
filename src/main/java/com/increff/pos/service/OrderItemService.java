@@ -52,11 +52,9 @@ public class OrderItemService  {
     }
 
     @Transactional
-    public List<OrderItemPojo> placeOrder(Integer orderId) throws ApiException{
-    List<OrderItemPojo> orderItemList = orderItemDao.getByOrderId(orderId);
-    if (orderItemList.size() == 0)
+    public void placeOrder(Integer orderId) throws ApiException{
+    if (orderItemDao.getByOrderId(orderId).isEmpty())
         throw new ApiException("No item in the cart to place order");
-    return orderItemList;
     }
 
     private boolean checkInventory(OrderItemPojo orderItem,Integer stockLeft) throws ApiException{
@@ -75,7 +73,7 @@ public class OrderItemService  {
     }
 
     public OrderItemPojo getOrderItemById(Integer id) {
-        return orderItemDao.getBrandDataById(id);
+        return orderItemDao.getOrderItemDataById(id);
     }
 
     public void deleteByOrderId(Integer orderId) {

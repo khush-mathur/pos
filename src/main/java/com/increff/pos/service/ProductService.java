@@ -36,12 +36,18 @@ public class ProductService {
         else
             throw new ApiException("Unable to update the product with id "+ id);
     }
-    public ProductPojo getProductById(Integer id) {
-        return productDao.getByID(id);
+    public ProductPojo getProductById(Integer id) throws ApiException {
+        ProductPojo product = productDao.getByID(id);
+        if(product == null)
+            throw new ApiException("No product with barcode "+ id +"exist");
+        return product;
     }
 
-    public ProductPojo getProductByBarcode(String barcode) {
-        return productDao.getByBarcode(barcode);
+    public ProductPojo getProductByBarcode(String barcode) throws ApiException{
+        ProductPojo product = productDao.getByBarcode(barcode);
+        if(product == null)
+            throw new ApiException("No product with barcode "+ barcode +"exist");
+        return product;
     }
 
     public List<ProductPojo> getAll(){

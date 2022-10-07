@@ -1,10 +1,11 @@
 package com.increff.pos.dao;
 
+import com.increff.pos.exception.ApiException;
 import com.increff.pos.pojo.BrandPojo;
 import org.springframework.stereotype.Repository;
-import javax.persistence.Query;
+import org.springframework.transaction.annotation.Transactional;
+
 import javax.persistence.TypedQuery;
-import javax.transaction.Transactional;
 import java.util.List;
 
 @Repository
@@ -15,14 +16,15 @@ public class BrandDao extends AbstractDao{
     private static final String SELECT_ALL = "select p from Brand p";
     private static final String SELECT_BY_CATEGORY = "select p from Brand p where category =:category";
     private static final String SELECT_BY_BRAND = "select p from Brand p where brandName =:brandName";
-    private static final String DELETE_ID = "delete from Brand p where id=:id";
 
+    @Transactional(readOnly = true)
     public BrandPojo selectById(Integer id) {
         TypedQuery<BrandPojo> query = em().createQuery(SELECT_BY_ID, BrandPojo.class);
         query.setParameter("id", id);
         return getSingleRow(query);
     }
 
+    @Transactional(readOnly = true)
     public BrandPojo selectByBrandCategory(String brandName,String category) {
         TypedQuery<BrandPojo> query = em().createQuery(SELECT_BY_BRAND_CATEGORY, BrandPojo.class);
         query.setParameter("brandName", brandName);
@@ -30,41 +32,26 @@ public class BrandDao extends AbstractDao{
         return getSingleRow(query);
     }
 
-    @Transactional
+    @Transactional(rollbackFor = ApiException.class)
     public void insert(BrandPojo brand) {
         em().persist(brand);
     }
 
+    @Transactional(readOnly = true)
     public List<BrandPojo> selectAll() {
         TypedQuery<BrandPojo> query = em().createQuery(SELECT_ALL, BrandPojo.class);
         return query.getResultList();
     }
 
-    @Transactional
-    public BrandPojo update(BrandPojo brand){
-        em().merge(brand);
-        return brand;
-    }
-
-    @Transactional
-    public void delete(Integer id) {
-        Query query = em().createQuery(DELETE_ID);
-        query.setParameter("id", id);
-        query.executeUpdate();
-    }
-
-//    public List<BrandPojo> getByBrandCategory(String brandName, String category) {
-//        TypedQuery<BrandPojo> query = em().createQuery(SELECT_ALL, BrandPojo.class);
-//        return query.getResultList();
-//    }
-
-    public List<BrandPojo> getByCategory(String category) {
+    @Transactional(readOnly = true)
+    public List<BrandPojo> selectByCategory(String category) {
         TypedQuery<BrandPojo> query = em().createQuery(SELECT_BY_CATEGORY, BrandPojo.class);
         query.setParameter("category",category);
         return query.getResultList();
     }
 
-    public List<BrandPojo> getByBrand(String brandName) {
+    @Transactional(readOnly = true)
+    public List<BrandPojo> selectByBrand(String brandName) {
         TypedQuery<BrandPojo> query = em().createQuery(SELECT_BY_BRAND, BrandPojo.class);
         query.setParameter("brandName",brandName);
         return query.getResultList();

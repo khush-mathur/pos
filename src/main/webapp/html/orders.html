@@ -48,7 +48,7 @@
     </div>
 
     <!-- order Edit Modal -->
-    <div class="modal" tabindex="-1" role="dialog" id="view-order-modal">
+    <div class="modal w-100" tabindex="-1" role="dialog" id="view-order-modal">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -64,7 +64,7 @@
                             <table class="table table-striped table-hover" id="order-item-table">
                                 <thead>
                                 <tr>
-                                    <th scope="col">Product Id</th>
+                                    <th scope="col">Product</th>
                                     <th scope="col">Barcode</th>
                                     <th scope="col">Quantity</th>
                                     <th scope="col">Mrp</th>
@@ -93,6 +93,9 @@
 <footer th:replace="snippets.html :: name_footer"></footer>
 
 <script th:src="@{/static/orders.js}"/></script>
+<script th:src="@{/static/app.js}"/></script>
+<script th:src="@{/static/notify.js}"/></script>
+<script th:src="@{/static/notify.min.js}"/></script>
 
 </body>
 

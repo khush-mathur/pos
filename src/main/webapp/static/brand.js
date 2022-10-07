@@ -18,11 +18,11 @@ function addBrand(event){
        	'Content-Type': 'application/json'
        },	   
 	   success: function(response) {
+	   $.notify("New Brand Added", "success");
 	   		getBrandList();
 	   },
 	   error: handleAjaxError
 	});
-
 	return false;
 }
 
@@ -44,6 +44,7 @@ function updateBrand(event){
        	'Content-Type': 'application/json'
        },	   
 	   success: function(response) {
+	        $.notify("Brand Updated successfully", "success");
 	   		getBrandList();
 	   },
 	   error: handleAjaxError
@@ -60,19 +61,6 @@ function getBrandList(){
 	   type: 'GET',
 	   success: function(data) {
 	   		displayBrandList(data);
-	   },
-	   error: handleAjaxError
-	});
-}
-
-function deleteBrand(id){
-	var url = getBrandUrl() + "/delete/" + id;
-
-	$.ajax({
-	   url: url,
-	   type: 'DELETE',
-	   success: function(data) {
-	   		getBrandList();
 	   },
 	   error: handleAjaxError
 	});
@@ -142,7 +130,6 @@ function displayBrandList(data){
 		var e = data[i];
 		var buttonHtml = ' <button class = "btn btn-outline-secondary btn-sm" onclick="displayEditBrand(' + e.id + ')">edit</button>'
 		var row = '<tr>'
-		+ '<td>' + e.id + '</td>'
 		+ '<td>' + e.brandName + '</td>'
 		+ '<td>'  + e.category + '</td>'
 		+ '<td>' + buttonHtml + '</td>'
@@ -212,10 +199,6 @@ function init(){
     $('#brandFile').on('change', updateFileName)
 }
 
-function handleAjaxError(response){
-	var response = JSON.parse(response.responseText);
-	alert(response.message);
-}
 function highLight(){
 highlightItem("Brands")
 }

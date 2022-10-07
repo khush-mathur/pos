@@ -7,6 +7,7 @@ import com.increff.pos.model.data.OrderData;
 import com.increff.pos.model.data.OrderItemData;
 import com.increff.pos.pojo.OrderItemPojo;
 import com.increff.pos.pojo.OrderPojo;
+import com.increff.pos.pojo.ProductPojo;
 import com.increff.pos.service.OrderItemService;
 import com.increff.pos.service.OrderService;
 import com.increff.pos.service.ProductService;
@@ -23,7 +24,6 @@ public class OrderDto {
     OrderService orderService;
     @Autowired
     OrderItemService orderItemService;
-
     @Autowired
     ProductService productService;
 
@@ -43,29 +43,26 @@ public class OrderDto {
         return OrderDtoHelper.convertToData(orderService.addOrder());
     }
 
-    public List<OrderItemData> placeOrder(Integer orderId) throws ApiException{
-        List<OrderItemData> itemDataList = new ArrayList<>();
-        List<OrderItemPojo> pojoList = orderItemService.placeOrder(orderId);
-        for (OrderItemPojo pojo :pojoList){
-            itemDataList.add(OrderItemDtoHelper.convertToData(pojo));
-        }
+    public void placeOrder(Integer orderId) throws ApiException{
+        orderItemService.placeOrder(orderId);
         orderService.updateOrderStatus(orderId);
-        return itemDataList;
     }
 
     public List<OrderItemData> getItemListByOrderId(Integer id) throws ApiException {
         List<OrderItemData> orderItemList = new ArrayList<>();
         for(OrderItemPojo pojo: orderItemService.getByOrderId(id)) {
             OrderItemData orderItem = OrderItemDtoHelper.convertToData(pojo);
-            orderItem.setBarcode(productService.getProductById(orderItem.getProductId()).getBarcode());
+            ProductPojo product = productService.getProductById(orderItem.getProductId());
+            orderItem.setBarcode(product.getBarcode());
+            orderItem.setProductName(product.getName());
             orderItemList.add(orderItem);
         }
         return orderItemList;
     }
     public List<OrderData> fetchAll() {
         List<OrderData> orderList = new ArrayList<>();
-        for (OrderPojo p : orderService.getAllOrders()) {
-            orderList.add(OrderDtoHelper.convertToData(p));
+        for (OrderPojo pojo : orderService.getAllOrders()) {
+            orderList.add(OrderDtoHelper.convertToData(pojo));
         }
         return orderList;
     }
@@ -73,7 +70,9 @@ public class OrderDto {
     public void generateInvoice(int orderId) throws ApiException {
         List<OrderItemData> orderItemList = new ArrayList<>();
         for (OrderItemPojo pojo : orderItemService.getByOrderId(orderId)) {
-            orderItemList.add(OrderItemDtoHelper.convertToData(pojo));
+            OrderItemData orderItemData= OrderItemDtoHelper.convertToData(pojo);
+            orderItemData.setProductName(productService.getProductById(pojo.getProductId()).getName());
+            orderItemList.add(orderItemData);
         }
         orderService.getOrderInvoice(orderId, orderItemList);
     }
